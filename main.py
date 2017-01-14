@@ -18,7 +18,7 @@ def main():
 	env = wrappers.Monitor(env, "/tmp/gym-results", force=True)
 	
 	reward_list = []
-	#16 * 4 - 16 places on lake and 4 possible moves
+	#16 * 4: 16 places on lake and 4 possible moves
 	Q_TABLE = np.zeros([env.observation_space.n,env.action_space.n])
 
 	for i in range(NUMBER_OF_EPISODES):
@@ -28,7 +28,7 @@ def main():
 			action = np.argmax(Q[state,:] + np.random.randn(1,env.action_space.n)*(1./(i+1)))
 			env.render()
 			new_state, reward, done, _ = env.step(action)
-			#update Q-table with knowledge gained
+			#traing and update Q-table based on result
 			ESTIMATE_OF_OPTIMAL_FUTURE_STATE_ACTION = np.max(Q_TABLE[new_state,:]) - Q_TABLE[state,action]
 			Q_TABLE[state,action] = Q_TABLE[state,action] + LEARNING_RATE*(reward + (DISCOUNT_FACTOR*ESTIMATE_OF_OPTIMAL_FUTURE_STATE_ACTION))
 			total_reward += reward
