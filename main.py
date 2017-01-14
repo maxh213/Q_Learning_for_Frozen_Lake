@@ -10,7 +10,7 @@ MOVE_DOWN = 1
 MOVE_RIGHT = 2
 MOVE_LEFT = 0
 LEARNING_RATE = 0.85
-NOISE = 0.99
+DISCOUNT_FACTOR = 0.99
 
 
 def main():
@@ -19,7 +19,7 @@ def main():
 	
 	reward_list = []
 	#16 * 4 - 16 places on lake and 4 possible moves
-	Q = np.zeros([env.observation_space.n,env.action_space.n])
+	Q_TABLE = np.zeros([env.observation_space.n,env.action_space.n])
 
 	for i in range(NUMBER_OF_EPISODES):
 		state = env.reset()
@@ -29,10 +29,12 @@ def main():
 			env.render()
 			new_state, reward, done, _ = env.step(action)
 			#update Q-table with knowledge gained
-			Q[state,action] = Q[state,action] + LEARNING_RATE*(reward + NOISE*np.max(Q[new_state,:]) - Q[state,action])
+			ESTIMATE_OF_OPTIMAL_FUTURE_STATE_ACTION = np.max(Q_TABLE[new_state,:]) - Q_TABLE[state,action]
+			Q_TABLE[state,action] = Q_TABLE[state,action] + LEARNING_RATE*(reward + (DISCOUNT_FACTOR*ESTIMATE_OF_OPTIMAL_FUTURE_STATE_ACTION))
 			total_reward += reward
 			state = new_state
 			if done:
+				env.render()
 				break
 		reward_list.append(total_reward)
 
