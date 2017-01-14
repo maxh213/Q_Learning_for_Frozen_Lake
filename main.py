@@ -25,7 +25,7 @@ def main():
 		state = env.reset()
 		total_reward = 0
 		for j in range(ATTEMPTS_AT_EACH_EPISODE):
-			action = np.argmax(Q[state,:] + np.random.randn(1,env.action_space.n)*(1./(i+1)))
+			action = np.argmax(Q_TABLE[state,:] + np.random.randn(1,env.action_space.n)*(1./(i+1)))
 			env.render()
 			new_state, reward, done, _ = env.step(action)
 			#traing and update Q-table based on result
@@ -40,7 +40,7 @@ def main():
 
 	print("Average score per episode: " + str(sum(reward_list)/NUMBER_OF_EPISODES))
 	print("Final Q-Table Values")
-	print(Q)
+	print(Q_TABLE)
 
 	env.close()
 	gym.upload("/tmp/gym-results", api_key=secret_constants.API_KEY)
