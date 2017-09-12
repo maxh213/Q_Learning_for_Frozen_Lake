@@ -28,7 +28,7 @@ def main():
 			action = np.argmax(Q_TABLE[state,:] + np.random.randn(1,env.action_space.n)*(1./(i+1)))
 			env.render()
 			new_state, reward, done, _ = env.step(action)
-			#traing and update Q-table based on result
+			#train and update Q-table based on result
 			ESTIMATE_OF_OPTIMAL_FUTURE_STATE_ACTION = np.max(Q_TABLE[new_state,:]) - Q_TABLE[state,action]
 			Q_TABLE[state,action] = Q_TABLE[state,action] + LEARNING_RATE*(reward + (DISCOUNT_FACTOR*ESTIMATE_OF_OPTIMAL_FUTURE_STATE_ACTION))
 			total_reward += reward
